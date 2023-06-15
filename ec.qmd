@@ -2,16 +2,22 @@
 title: "Economic Connectedness"
 author: "David Kane"
 format: html
+#| echo: false
 ---
 
 
 ```{r}
-#| echo: false
 #| message: false
 library(tidyverse)
 ```
 
 ```{r}
-x <- read_csv("data/social_capital_county.csv")
+x <- read_csv("data/social_capital_county.csv", show_col_types =  FALSE) |>
+  select(country_name, pop2018, ec_country) |>
+  mutate(state = str--replace(county_name, )) 
 ```
+
+```{r}
+summary(x) 
+``` 
 
