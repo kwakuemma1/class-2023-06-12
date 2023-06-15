@@ -12,6 +12,6 @@ library(tidyverse)
 ```
 
 ```{r}
-
+x <- read_csv("data/social_capital_county.csv")
 ```
 
