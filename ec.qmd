@@ -5,7 +5,6 @@ format: html
 #| echo: false
 ---
 
-
 ```{r}
 #| message: false
 library(tidyverse)
@@ -13,11 +12,20 @@ library(tidyverse)
 
 ```{r}
 x <- read_csv("data/social_capital_county.csv", show_col_types =  FALSE) |>
-  select(country_name, pop2018, ec_country) |>
-  mutate(state = str--replace(county_name, )) 
+  drop_na() |>
+  select(county_name, pop2018, ec_county)
+
 ```
 
 ```{r}
-summary(x) 
-``` 
+x |>
+  mutate(state = str_replace(county_name, ".*, ", "")) |>
+  summarize(pop = sum(pop2018), .by = state, na.rm = FALSE, 
+            avg_ec = mean(ec_country), 
+            .by = state) |>
+  ggplot(mapping = aes(x = pop, y = avg_ec)) +
+  geom_point() + goem_smooth(method = "lm") +
+  scales_x_log10(labels = scales::comma_format())  +
+  labs()
+```
 
