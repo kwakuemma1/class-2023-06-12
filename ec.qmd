@@ -7,10 +7,13 @@ format: html
 
 ```{r}
 #| message: false
+#| echo: false
 library(tidyverse)
 ```
 
 ```{r}
+#| message: false
+#| echo: false
 x <- read_csv("data/social_capital_county.csv", show_col_types =  FALSE) |>
   drop_na() |>
   select(county_name, pop2018, ec_county)
@@ -18,14 +21,20 @@ x <- read_csv("data/social_capital_county.csv", show_col_types =  FALSE) |>
 ```
 
 ```{r}
+#| message: false
+#| echo: false
 x |>
   mutate(state = str_replace(county_name, ".*, ", "")) |>
-  summarize(pop = sum(pop2018), .by = state, na.rm = FALSE, 
-            avg_ec = mean(ec_country), 
-            .by = state) |>
+  summarize(pop = sum(pop2018), .by = (state), na.rm = FALSE, 
+            avg_ec = mean(ec_county)) |>
   ggplot(mapping = aes(x = pop, y = avg_ec)) +
-  geom_point() + goem_smooth(method = "lm") +
-  scales_x_log10(labels = scales::comma_format())  +
-  labs()
+  geom_point() + 
+  geom_smooth(method = "lm", formula = 'y ~ x', se = FALSE) +
+  scale_x_log10(labels = scales::comma_format())  +
+  labs(title = "Economic Connectedness and Population in the US",
+       subtitle = "Bigger states have counties with lower average economic connectedness",
+       x = "State Population",
+       y = "Average County Economic Connectedness",
+       caption = "Data: Opportunity Insights")
 ```
 
